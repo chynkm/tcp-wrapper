@@ -54,62 +54,88 @@
         </nav>
         <!-- Begin page content -->
         <div class="container">
-            <div class="page-header">
-                <h1>Sticky footer with fixed navbar</h1>
+            <div class="row">
+                <div class="page-header">
+                    <h1>Sticky footer with fixed navbar</h1>
+                </div>
             </div>
-            <p class="lead">
-                Host Access Control allows you to set up specific rules to allow or deny access to your server and services on it based on the IP address that is attempting to connect. It is general practice that denying all connections and only allowing connections that you wish to proceed is the most secure way to use Host Access Control.
-                <br>
-                <br>
-                To set up a rule, you will need to add the service you wish to create the rule for, the IP address(es) you wish to allow or deny, and then the action to be taken (allow or deny).
-                <br>
-                <br>
-                For example, you could set up the following rules to lock down your SSH service:</p>
-                <br>
-                <table>
-                    <tbody><tr>
-                        <th>Daemon</th>
-                        <th>Access List</th>
-                        <td>&nbsp;</td>
-                        <th>Action</th>
-                        <td>&nbsp;</td>
-                        <th>Comment</th>
-                    </tr>
-                    <tr>
-                        <td>sshd</td>
-                        <td>192.168.0.0/255.255.255.0</td>
-                        <td>&nbsp;</td>
-                        <td>allow</td>
-                        <td>&nbsp;</td>
-                        <td>Allow local SSH access</td>
-                    </tr>
-                    <tr>
-                        <td>sshd</td>
-                        <td>198.66.254.254</td>
-                        <td>&nbsp;</td>
-                        <td>allow</td>
-                        <td>&nbsp;</td>
-                        <td>Allow SSH from my specific IP</td>
-                    </tr>
-                    <tr>
-                        <td>sshd</td>
-                        <td>ALL</td>
-                        <td>&nbsp;</td>
-                        <td>deny</td>
-                        <td>&nbsp;</td>
-                        <td>Deny access from all other IPs</td>
-                    </tr>
-                </tbody>
-                </table>
-                <br>
-                <p class="description">Note that the rules have an order of precedence. You need to place your allow rules before your deny rules if you are choosing to use the allow from a few, then deny from all technique.
-                <br>
-                You can also use "ALL EXCEPT x.x.x.x" as an Access List which will allow all IP addresses except x.x.x.x (replace with a specific IP address).</p>
-            </p>
+            <div class="row">
+                <p class="lead">
+                    Host Access Control allows you to set up specific rules to allow or deny access to your server and services on it based on the IP address that is attempting to connect. It is general practice that denying all connections and only allowing connections that you wish to proceed is the most secure way to use Host Access Control.
+                    <br>
+                    <br>
+                    To set up a rule, you will need to add the service you wish to create the rule for, the IP address(es) you wish to allow or deny, and then the action to be taken (allow or deny).
+                    <br>
+                    <br>
+                    For example, you could set up the following rules to lock down your SSH service:</p>
+                    <br>
+                    <table>
+                        <tbody><tr>
+                            <th>Daemon</th>
+                            <th>Access List</th>
+                            <td>&nbsp;</td>
+                            <th>Action</th>
+                            <td>&nbsp;</td>
+                            <th>Comment</th>
+                        </tr>
+                        <tr>
+                            <td>sshd</td>
+                            <td>192.168.0.0/255.255.255.0</td>
+                            <td>&nbsp;</td>
+                            <td>allow</td>
+                            <td>&nbsp;</td>
+                            <td>Allow local SSH access</td>
+                        </tr>
+                        <tr>
+                            <td>sshd</td>
+                            <td>198.66.254.254</td>
+                            <td>&nbsp;</td>
+                            <td>allow</td>
+                            <td>&nbsp;</td>
+                            <td>Allow SSH from my specific IP</td>
+                        </tr>
+                        <tr>
+                            <td>sshd</td>
+                            <td>ALL</td>
+                            <td>&nbsp;</td>
+                            <td>deny</td>
+                            <td>&nbsp;</td>
+                            <td>Deny access from all other IPs</td>
+                        </tr>
+                    </tbody>
+                    </table>
+                    <br>
+                    <p class="description">Note that the rules have an order of precedence. You need to place your allow rules before your deny rules if you are choosing to use the allow from a few, then deny from all technique.
+                    <br>
+                    You can also use "ALL EXCEPT x.x.x.x" as an Access List which will allow all IP addresses except x.x.x.x (replace with a specific IP address).</p>
+                </p>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    Daemon
+                </div>
+                <div class="col-lg-3">
+                    Access List
+                </div>
+                <div class="col-lg-2">
+                    Action
+                </div>
+                <div class="col-lg-4">
+                    Comment
+                </div>
+            </div>
+            <form role="form" class="tcp_rules">
+                <?php include('./wrapper_template.php'); ?>
+            </form>
+            <div class="row">
+                <div class="col-lg-12">
+                    <button type="button" class="btn btn-primary pull-right" id="add_row">Add +</button>
+                </div>
+            </div>
         </div>
         <footer class="footer">
             <div class="container">
-                <p class="text-muted">Place sticky footer content here.</p>
+                <p class="text-muted">&copy; M Networks <?php echo date('Y'); ?></p>
             </div>
         </footer>
         <!-- Bootstrap core JavaScript
@@ -117,6 +143,6 @@
         <!-- Placed at the end of the document so the pages load faster -->
         <script src="jquery.min.js"></script>
         <script src="bootstrap.min.js"></script>
+        <script src="tcp_wrapper.js"></script>
     </body>
 </html>
-
