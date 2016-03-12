@@ -1,0 +1,36 @@
+sudo setfacl -m "u:karthikm:rwx" /etc/hosts.allow
+
+in the following list, mask should be (rwx)
+
+karthikm@hp:~$ sudo setfacl -m "u:www-data:rwx" /etc/hosts.allow
+karthikm@hp:~$ getfacl /etc/hosts.allow
+getfacl: Removing leading '/' from absolute path names
+# file: etc/hosts.allow
+# owner: root
+# group: root
+user::rw-
+user:www-data:rwx
+group::r--
+mask::rwx
+other::r--
+
+karthikm@hp:~$ ll /etc/hosts.allow
+-rw-rwxr--+ 1 root root 411 Jul 23  2014 /etc/hosts.allow*
+
+# /etc/hosts.allow: list of hosts that are allowed to access the system.
+#                   See the manual pages hosts_access(5) and hosts_options(5).
+#
+# Example:    ALL: LOCAL @some_netgroup
+#             ALL: .foobar.edu EXCEPT terminalserver.foobar.edu
+#
+# If you're going to protect the portmapper use the name "rpcbind" for the
+# daemon name. See rpcbind(8) and rpc.mountd(8) for further information.
+#
+
+to remove extended ACL's
+setfacl -b /etc/hosts.allow
+
+
+When a client request is received by a TCP wrapped service, it takes the following basic steps:
+1) References /etc/hosts.allow. — The TCP wrapped service sequentially parses the /etc/hosts.allow file and applies the first rule specified for that service. If it finds a matching rule, it allows the connection. If not, it moves on to step 2.
+2) References /etc/hosts.deny. — The TCP wrapped service sequentially parses the /etc/hosts.deny file. If it finds a matching rule is denies the connection. If not, access to the service is granted.

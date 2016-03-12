@@ -1,3 +1,69 @@
+<?php
+session_start();
+if($_SESSION['logged_in'] != 1)
+    header("location: login.php");
+
+// define variables and set to empty values
+$daemon_error = $access_list_error = $action_error = '';
+$daemon       = $access_list       = $action       = $comment = '';
+
+include('File_helper.php');
+$helper = new File_helper;
+
+if($_SERVER["REQUEST_METHOD"] == "POST")
+{
+    $rules = array();
+    for ($i=0; $i < count($_POST['daemon']) ; $i++)
+    {
+        if (empty($_POST["daemon"][$i]))
+        {
+            $daemon_error = "Daemon is required.";
+            $daemon       = '';
+        }
+        else
+            $daemon = test_input($_POST["daemon"][$i]);
+
+        if (empty($_POST["access_list"][$i]))
+        {
+            $access_list_error = "Access List is required.";
+            $access_list       = '';
+        }
+        else
+            $access_list = test_input($_POST["access_list"][$i]);
+
+        if (empty($_POST["action"][$i]))
+        {
+            $action_error = "Action is required.";
+            $action       = '';
+        }
+        else
+            $action = test_input($_POST["action"][$i]);
+
+        $comment = $_POST["comment"][$i] ? test_input($_POST["comment"][$i]) : '';
+
+        $rules[] = array(
+            'daemon'        => $daemon,
+            'access_list'   => $access_list,
+            'action'        => $action,
+            'comment'       => $comment,
+        );
+    }
+    if($rules)
+        $helper->write($rules);
+}
+else
+    $rules = $helper->read();
+
+function test_input($data)
+{
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    if(substr($data, -1) == ',')
+        $data = rtrim($data, ",");
+    return $data;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -9,9 +75,10 @@
         <link rel="icon" href="favicon.ico">
         <title>TCP Wrapper</title>
         <!-- Bootstrap core CSS -->
-        <link href="bootstrap.min.css" rel="stylesheet">
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/jquery-ui.min.css" rel="stylesheet">
         <!-- Custom styles for this template -->
-        <link href="custom.css" rel="stylesheet">
+        <link href="css/custom.css" rel="stylesheet">
         <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -22,31 +89,11 @@
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    </button>
                     <a class="navbar-brand" href="#">TCP Wrapper</a>
                 </div>
                 <div id="navbar" class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">Home</a></li>
-                        <li><a href="#about">About</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li class="dropdown-header">Nav header</li>
-                                <li><a href="#">Separated link</a></li>
-                                <li><a href="#">One more separated link</a></li>
-                            </ul>
-                        </li>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="logout.php">Logout</a></li>
                     </ul>
                 </div>
                 <!--/.nav-collapse -->
@@ -110,8 +157,20 @@
                     You can also use "ALL EXCEPT x.x.x.x" as an Access List which will allow all IP addresses except x.x.x.x (replace with a specific IP address).</p>
                 </p>
             </div>
+            <?php if($daemon_error || $access_list_error || $action_error): ?>
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <?php if($daemon_error):?>
+                        <?php echo $daemon_error; ?><br/>
+                    <?php endif;?>
+                    <?php if($access_list_error):?>
+                        <?php echo $access_list_error; ?><br/>
+                    <?php endif;?>
+                    <?php if($action_error) echo $action_error; ?>
+                </div>
+            <?php endif; ?>
             <div class="row">
-                <div class="col-lg-3">
+                <div class="col-lg-2">
                     Daemon
                 </div>
                 <div class="col-lg-3">
@@ -123,15 +182,29 @@
                 <div class="col-lg-4">
                     Comment
                 </div>
-            </div>
-            <form role="form" class="tcp_rules">
-                <?php include('./wrapper_template.php'); ?>
-            </form>
-            <div class="row">
-                <div class="col-lg-12">
-                    <button type="button" class="btn btn-primary pull-right" id="add_row">Add +</button>
+                <div class="col-lg-1">
+                    Delete
                 </div>
             </div>
+            <form role="form" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+                <div class="row tcp_rules">
+                    <?php if($rules): ?>
+                        <?php foreach ($rules as $row): ?>
+                            <div class="row tcp_wrapper_template_row"><div class="col-lg-2"><div class="form-group"><input type="text" placeholder="Daemon" name="daemon[]" value="<?php echo $row['daemon']; ?>" class="form-control daemon"></div></div><div class="col-lg-3"><div class="form-group"><input type="text" placeholder="Access List" name="access_list[]" value="<?php echo $row['access_list']; ?>" class="form-control"></div></div><div class="col-lg-2"><div class="form-group"><input type="text" placeholder="Action" name="action[]" value="<?php echo $row['action']; ?>" class="form-control action"></div></div><div class="col-lg-4"><div class="form-group"><input type="text" placeholder="Comment" name="comment[]" value="<?php echo $row['comment']; ?>" class="form-control"></div></div><div class="col-lg-1"><button type="button" class="btn btn-danger delete_row"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button></div></div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <?php include('./wrapper_template.php'); ?>
+                    <?php endif;?>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                    <div class="col-lg-6">
+                        <button type="button" class="btn btn-success pull-right" id="add_row">Add +</button>
+                    </div>
+                </div>
+            </form>
         </div>
         <footer class="footer">
             <div class="container">
@@ -141,8 +214,9 @@
         <!-- Bootstrap core JavaScript
             ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
-        <script src="jquery.min.js"></script>
-        <script src="bootstrap.min.js"></script>
-        <script src="tcp_wrapper.js"></script>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/jquery-ui.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/tcp_wrapper.js"></script>
     </body>
 </html>
