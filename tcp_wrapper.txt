@@ -2,8 +2,8 @@ sudo setfacl -m "u:karthikm:rwx" /etc/hosts.allow
 
 in the following list, mask should be (rwx)
 
-karthikm@hp:~$ sudo setfacl -m "u:www-data:rwx" /etc/hosts.allow
-karthikm@hp:~$ getfacl /etc/hosts.allow
+$ sudo setfacl -m "u:www-data:rwx" /etc/hosts.allow
+$ getfacl /etc/hosts.allow
 getfacl: Removing leading '/' from absolute path names
 # file: etc/hosts.allow
 # owner: root
@@ -14,7 +14,7 @@ group::r--
 mask::rwx
 other::r--
 
-karthikm@hp:~$ ll /etc/hosts.allow
+$ ll /etc/hosts.allow
 -rw-rwxr--+ 1 root root 411 Jul 23  2014 /etc/hosts.allow*
 
 # /etc/hosts.allow: list of hosts that are allowed to access the system.
@@ -29,7 +29,6 @@ karthikm@hp:~$ ll /etc/hosts.allow
 
 to remove extended ACL's
 setfacl -b /etc/hosts.allow
-
 
 When a client request is received by a TCP wrapped service, it takes the following basic steps:
 1) References /etc/hosts.allow. — The TCP wrapped service sequentially parses the /etc/hosts.allow file and applies the first rule specified for that service. If it finds a matching rule, it allows the connection. If not, it moves on to step 2.

@@ -5,7 +5,7 @@ if(isset($_SESSION['logged_in']))
 
 if($_POST)
 {
-    if($_POST['email'] == "boss@boss.com" && md5($_POST['password']) == "e10adc3949ba59abbe56e057f20f883e")
+    if($_POST['email'] == "demo@toptrix.in" && md5($_POST['password']) == "fe01ce2a7fbac8fafaed7c982a04e229")
     {
         $_SESSION['logged_in']= 1;
         header("location: index.php");
@@ -20,10 +20,10 @@ if($_POST)
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="chynkm@gmail.com">
+    <meta name="description" content="TCP Wrapper Editor by Toptrix">
+    <meta name="author" content="mail@toptrix.in">
     <link rel="icon" href="favicon.ico">
-    <title>TCP Wrapper</title>
+    <title>TCP Wrapper Editor | TopTrix</title>
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
@@ -37,7 +37,7 @@ if($_POST)
   <body>
     <div class="container">
       <form class="form-signin" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-        <h2 class="form-signin-heading">Please sign in</h2>
+        <h2 class="form-signin-heading">TCP Wrapper Editor</h2>
         <?php if($authentication_failed): ?>
           <div class="alert alert-danger" role="alert">
             The email and password you entered don't match.

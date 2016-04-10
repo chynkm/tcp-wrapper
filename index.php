@@ -70,10 +70,10 @@ function test_input($data)
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="">
-        <meta name="author" content="chynkm@gmail.com">
+        <meta name="description" content="TCP Wrapper Editor by Toptrix">
+        <meta name="author" content="mail@toptrix.in">
         <link rel="icon" href="favicon.ico">
-        <title>TCP Wrapper</title>
+        <title>TCP Wrapper Editor | Toptrix</title>
         <!-- Bootstrap core CSS -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link href="css/jquery-ui.min.css" rel="stylesheet">
@@ -89,7 +89,7 @@ function test_input($data)
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="#">TCP Wrapper</a>
+                    <a class="navbar-brand" href="#">TCP Wrapper Editor</a>
                 </div>
                 <div id="navbar" class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
@@ -103,59 +103,51 @@ function test_input($data)
         <div class="container">
             <div class="row">
                 <div class="page-header">
-                    <h1>Sticky footer with fixed navbar</h1>
+                    <h1>TCP Wrapper Editor</h1>
                 </div>
             </div>
             <div class="row">
                 <p class="lead">
-                    Host Access Control allows you to set up specific rules to allow or deny access to your server and services on it based on the IP address that is attempting to connect. It is general practice that denying all connections and only allowing connections that you wish to proceed is the most secure way to use Host Access Control.
-                    <br>
-                    <br>
-                    To set up a rule, you will need to add the service you wish to create the rule for, the IP address(es) you wish to allow or deny, and then the action to be taken (allow or deny).
-                    <br>
-                    <br>
-                    For example, you could set up the following rules to lock down your SSH service:</p>
-                    <br>
-                    <table>
-                        <tbody><tr>
-                            <th>Daemon</th>
-                            <th>Access List</th>
-                            <td>&nbsp;</td>
-                            <th>Action</th>
-                            <td>&nbsp;</td>
-                            <th>Comment</th>
-                        </tr>
-                        <tr>
-                            <td>sshd</td>
-                            <td>192.168.0.0/255.255.255.0</td>
-                            <td>&nbsp;</td>
-                            <td>allow</td>
-                            <td>&nbsp;</td>
-                            <td>Allow local SSH access</td>
-                        </tr>
-                        <tr>
-                            <td>sshd</td>
-                            <td>198.66.254.254</td>
-                            <td>&nbsp;</td>
-                            <td>allow</td>
-                            <td>&nbsp;</td>
-                            <td>Allow SSH from my specific IP</td>
-                        </tr>
-                        <tr>
-                            <td>sshd</td>
-                            <td>ALL</td>
-                            <td>&nbsp;</td>
-                            <td>deny</td>
-                            <td>&nbsp;</td>
-                            <td>Deny access from all other IPs</td>
-                        </tr>
-                    </tbody>
-                    </table>
-                    <br>
-                    <p class="description">Note that the rules have an order of precedence. You need to place your allow rules before your deny rules if you are choosing to use the allow from a few, then deny from all technique.
-                    <br>
-                    You can also use "ALL EXCEPT x.x.x.x" as an Access List which will allow all IP addresses except x.x.x.x (replace with a specific IP address).</p>
+                    Host Access Control allows you to set up specific rules to allow or deny access to your server and services.<br/>
+                    Example to lock down your SSH service:(Please note that the rules have an order of precedence)
                 </p>
+                <br>
+                <table>
+                    <tbody><tr>
+                        <th>Daemon</th>
+                        <th>Access List</th>
+                        <td>&nbsp;</td>
+                        <th>Action</th>
+                        <td>&nbsp;</td>
+                        <th>Comment</th>
+                    </tr>
+                    <tr>
+                        <td>sshd</td>
+                        <td>192.168.1.0/255.255.255.0</td>
+                        <td>&nbsp;</td>
+                        <td>allow</td>
+                        <td>&nbsp;</td>
+                        <td>Allow local SSH access</td>
+                    </tr>
+                    <tr>
+                        <td>sshd</td>
+                        <td>10.1.1.23</td>
+                        <td>&nbsp;</td>
+                        <td>allow</td>
+                        <td>&nbsp;</td>
+                        <td>Allow SSH from my specific IP</td>
+                    </tr>
+                    <tr>
+                        <td>sshd</td>
+                        <td>ALL</td>
+                        <td>&nbsp;</td>
+                        <td>deny</td>
+                        <td>&nbsp;</td>
+                        <td>Deny access from all other IPs</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
             </div>
             <?php if($daemon_error || $access_list_error || $action_error): ?>
                 <div class="alert alert-danger alert-dismissible" role="alert">
@@ -208,7 +200,7 @@ function test_input($data)
         </div>
         <footer class="footer">
             <div class="container">
-                <p class="text-muted">&copy; M Networks <?php echo date('Y'); ?></p>
+                <p class="text-muted">&copy; <a href="//toptrix.in" target="_blank">TopTrix</a> <?php echo date('Y'); ?></p>
             </div>
         </footer>
         <!-- Bootstrap core JavaScript

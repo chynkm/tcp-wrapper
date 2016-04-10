@@ -40,7 +40,7 @@ class File_helper
             return $data;
         }
         else
-            die("error opening file");
+            die("Error opening /etc/hosts.allow file");
     }
 
     public function write($data)
